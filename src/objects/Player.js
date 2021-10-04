@@ -23,11 +23,11 @@ class Player {
 
 	    // Set a narrower bounding box for the character than the image itself
 		let characterImage = this.game.cache.getImage(characterSprite);
-	    this.character.body.setSize(25, characterImage.height-5, 4, 5);
+	    this.character.body.setSize(100, characterImage.height-5, 4, 5);
 
 	    //  Our two animations, walking left and right.
-	    this.character.animations.add('left', [0, 1, 2, 3], 10, true);
-	    this.character.animations.add('right', [5, 6, 7, 8], 10, true);
+	    this.character.animations.add('left', [0, 1, 2, 3, 4], 10, true);
+	    this.character.animations.add('right', [5, 6, 7, 8, 5], 10, true);
 
 	    this.sounds = {
 	    	'jump' : this.game.add.audio('jump',this.game.Settings.effectVolume)
@@ -83,7 +83,7 @@ class Player {
 		this.sounds.damage.play();
 		 //  Stand still
         this.character.animations.stop();
-        this.character.frame = 4;
+        this.character.frame = 7;
 	}
 
 	update(hitPlatform) {
@@ -106,7 +106,7 @@ class Player {
         //  Stand still
 	    else {
 	        this.character.animations.stop();
-	        this.character.frame = 4;
+	        this.character.frame = 7;
 	    }
 
 	    // Add more gravity if the down button is pressed

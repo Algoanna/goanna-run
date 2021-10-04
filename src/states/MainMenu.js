@@ -44,16 +44,16 @@ class MainMenu extends Phaser.State {
 			'title' : '- choose player -'
 			,'items': [
 	    		{
-					'label'    : 'Groom'
+					'label'    : 'Algoanna'
 					,'callback': _.bind(function(){
-						this.game.Settings.characterType = 'groom';
+						this.game.Settings.characterType = 'bride';
 						this.chooseName();
 					},this)
 	    		}
 	    		,{
-					'label'    : 'Bride'
+					'label'    : 'Flamingoanna'
 					,'callback': _.bind(function(){
-						this.game.Settings.characterType = 'bride';
+						this.game.Settings.characterType = 'groom';
 						this.chooseName();
 					},this)
 	    		}
@@ -135,27 +135,27 @@ class MainMenu extends Phaser.State {
 		var bride = this.game.add.image(this.game.width/2-170, headerOffset-5, 'brideLarge');
 		var groom = this.game.add.image(this.game.width/2+100, headerOffset-5, 'groomLarge');
 
-		// Add WEDDING text
-		var weddingText = this.game.add.text(this.game.width/2, headerOffset,'WEDDING');
-	    weddingText.anchor.set(0.5);
-	    weddingText.align = 'center';
-	    weddingText.font = 'arcade';
-	    weddingText.fontSize = 50;
-	    weddingText.fill = '#333023';
+		// Add ALGOANNA text
+		var algoannaText = this.game.add.text(this.game.width/2, headerOffset,'     GOANNA');
+	    algoannaText.anchor.set(0.5);
+	    algoannaText.align = 'center';
+	    algoannaText.font = 'arcade';
+	    algoannaText.fontSize = 50;
+	    algoannaText.fill = '#333023';
 
 		// Add RUN text
-	    var weddingText = this.game.add.text(this.game.width/2+3, headerOffset + 35,'RUN');
-	    weddingText.anchor.set(0.5);
-	    weddingText.align = 'center';
-	    weddingText.font = 'arcade';
-	    weddingText.fontSize = 120;
-	    weddingText.fill = '#504c39';
+	    var algoannaText = this.game.add.text(this.game.width/2+5, headerOffset + 35,'  RUN');
+	    algoannaText.anchor.set(0.5);
+	    algoannaText.align = 'center';
+	    algoannaText.font = 'arcade';
+	    algoannaText.fontSize = 120;
+	    algoannaText.fill = '#504c39';
 	}
 
 	createFooter() {
 
-		var firstLine = "copyright © 2017 - zsondre.hu";
-		var secondLine = "Music by Hunor Sukosd";
+		var firstLine = "Copyright © 2021 - Algorand.AI";
+		var secondLine = "Made for Algoanna.com by DeadZen with love";
 	    var footerHeight = 80;
 		
 	    var graphics = this.game.add.graphics(0, 0);
@@ -165,7 +165,7 @@ class MainMenu extends Phaser.State {
 	    graphics.endFill();
 
 
-		var firstLineText = this.game.add.text(this.game.width/2, this.game.world.height-footerHeight+30,firstLine);
+		var firstLineText = this.game.add.text(this.game.width/2+15, this.game.world.height-footerHeight+30,firstLine);
 	    firstLineText.anchor.set(0.5);
 	    firstLineText.align = 'center';
 	    firstLineText.font = 'arcade';
@@ -173,7 +173,7 @@ class MainMenu extends Phaser.State {
 	    firstLineText.fill = '#FFFFFF';
 	    firstLineText.strokeThickness = 0;
 
-	    var secondLineText = this.game.add.text(this.game.width/2, this.game.world.height-footerHeight+50,secondLine);
+	    var secondLineText = this.game.add.text(this.game.width/2+15, this.game.world.height-footerHeight+50,secondLine);
 	    secondLineText.anchor.set(0.5);
 	    secondLineText.align = 'center';
 	    secondLineText.font = 'arcade';

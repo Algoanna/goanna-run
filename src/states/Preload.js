@@ -32,10 +32,10 @@ class Preload extends Phaser.State {
 		this.game.load.image('platform-3', 'assets/images/platform-3.png');
 		
 		// Sprites
-		this.game.load.spritesheet('groomSprite', 'assets/images/groom.png', 32, 48);
-		this.game.load.spritesheet('brideSprite', 'assets/images/bride.png', 32, 48);
+		this.game.load.spritesheet('groomSprite', 'assets/images/groom.png', 107, 74);
+		this.game.load.spritesheet('brideSprite', 'assets/images/bride.png', 107, 74);
 		this.game.load.spritesheet('coin', 'assets/images/coin.png', 30, 30);
-		this.game.load.spritesheet('bunny', 'assets/images/bunny.png', 32, 30);		
+		this.game.load.spritesheet('bunny', 'assets/images/bunny.png', 48, 53);
 	}
 
 	create() {
