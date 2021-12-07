@@ -1,0 +1,35 @@
+<html>
+<head>
+    <style>
+        body { font-family: arial; margin: 20px; }
+        td { padding: 5px; }
+        .bullish { background: green; color: white; }
+        .bearish { background: red; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Leaderboard</h1>
+    <table>
+        <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Score</th>
+        </tr>
+        {% for leads in leaders %}
+            {% if leads['member'] %}
+            <tr>
+                <td>
+                    {{ leads['rank'] | int }}
+                </td>
+                <td>
+                    {{ leads['member'] }}
+                </td>
+                <td>
+                    {{ leads['score'] | float | round(2) }} 
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+</body>
+</html>
