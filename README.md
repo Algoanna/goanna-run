@@ -31,3 +31,6 @@
 1. Navigate to the root folder 
 2. Type in the command line `npm install`
 3. Then `npm start`
+
+## Important Note
+- The project is not audited and should not be used in a production environment.
