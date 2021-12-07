@@ -69,11 +69,13 @@ export default {
 	// URLs that are used by the Toplist service (absolute URLs)
 	,'urls' : {
 		// Getter to retrieve the top 10 players and their score
-		'getTop10' : ''
+		'getTop10' : 'https://game.algoanna.com/top10'
 		// Save the score at the end of the game
-		,'saveScore' : ''
+		,'saveScore' : 'https://game.algoanna.com/score'
 	}
 
-	// Name of the player
+	// Name / Lives / Wallet of the player
 	,'playerName': ''
+	,'playerLives': ''
+	,'playerWallet': ''
 };

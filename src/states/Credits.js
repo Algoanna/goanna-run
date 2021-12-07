@@ -2,7 +2,7 @@ class Credits extends Phaser.State {
 
 	create() {
 		// Set the game background colour
-		this.game.stage.backgroundColor = '#8e8869';
+		this.game.stage.backgroundColor = '#000000';
 		this.scrollSpeed = 1;
 		this.separatorHeight = 80;
 		this.lineHeight = 25;
@@ -10,6 +10,24 @@ class Credits extends Phaser.State {
 		this.nameTextSize = 35;
 		this.textStackHeight = this.game.height;
 		this.credits = [];
+
+    	var restartText = this.game.add.text(this.game.width/2, 20,'ESC - Go to main menu');
+	    restartText.anchor.set(0.5);
+	    restartText.align = 'center';
+	    restartText.font = 'arcade';
+	    restartText.fontSize = 30;
+	    restartText.fill = '#FED345';
+	    restartText.stroke = '#403511';
+    	restartText.strokeThickness = 2;
+
+
+		const leave = function (label) {
+			return function() {
+				this.game.state.start(label);
+			}
+		}
+		var buttonLeave = this.game.add.button(this.game.width/2-160,10, '', (leave('MainMenu').bind(this)), this, 2, 1, 0);
+		buttonLeave.width = 300
 
 		this.addTitle();
 		this.addCredits();
@@ -41,7 +59,7 @@ class Credits extends Phaser.State {
 	    text.font = 'arcade';
 	    text.fontSize = 60;
 	    text.fill = '#FFFFFF';
-	    text.stroke = '#504c39';
+	    text.stroke = '#403511';
    		text.strokeThickness = 6;
 
    		this.credits.push(text);
@@ -75,8 +93,8 @@ class Credits extends Phaser.State {
 	    text.align = 'center';
 	    text.font = 'arcade';
 	    text.fontSize = style=='title' ? this.titleTextSize : this.nameTextSize;
-	    text.fill = style=='title' ? '#504c39' : '#FFFFFF';
-	    text.stroke = style=='title'? '#FFFFFF' : '#504c39';
+	    text.fill = style=='title' ? '#403511' : '#FFFFFF';
+	    text.stroke = style=='title'? '#FFFFFF' : '#403511';
    		text.strokeThickness = style=='title'? 0 : 5;
    		return text;
 	}
@@ -93,64 +111,20 @@ class Credits extends Phaser.State {
 
 		return [
 			{
-				'title' : 'Lead Programmer'
+				'title' : 'Blockchain Developer'
+				,'value': 'DeadZen @Zenstyle'
+			},
+			{
+				'title' : 'Graphics'
+				,'value': '@LIXEL_PIZRD'
+			},
+			{
+				'title' : 'Original Developer'
 				,'value': 'Endre Andras'
-			}
-			,{
-				'title' : 'Test Engineer'
-				,'value': 'Zsofia Andras-Simko'
-			}
-			,{
-				'title' : 'Music by'
-				,'value': 'Hunor Sukosd'
-			}
-			,{
-				'title' : 'Music supervisor'
-				,'value': 'Kinga Andras'
-			}
-			,{
-				'title' : 'Level Design'
-				,'value': 'Endre Andras'
-			}
-			,{
-				'title' : 'Character Design'
-				,'value': 'Endre Andras'
-			}
-			,{
-				'title' : 'Sounds by'
-				,'value': 'Hunor Sukosd'
-			}
-			,{
-				'title' : 'Game Engine'
-				,'value': 'Phaser'
-			}
-			,{
-				'title' : 'Thanks to'
-				,'value': 'the Phaser community'
-			}
-			,{
-				'title' : 'Thanks for the tutorials'
-				,'value': 'Josh Morony'
-			}
-			,{
-				'title' : 'Background'
-				,'value': 'opengameart.org/users/greggman'
-			}
-			,{
-				'title' : 'Platforms'
-				,'value': 'opengameart.org/users/buch'
-			}
-			,{
-				'title' : 'Coins'
-				,'value': 'opengameart.org/users/irmirx'
-			}
-			,{
-				'title' : 'Flying rabbit'
-				,'value': 'jpopkitty.deviantart.com'
-			}
-			,{
+			},
+			{
 				'title' : 'Special thanks to'
-				,'value': ['Nyula','Picica']
+				,'value': ['Algorand',' Silvio Micali']
 			}
 		];		
 	}

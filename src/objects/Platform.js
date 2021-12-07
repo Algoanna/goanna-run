@@ -34,7 +34,7 @@ class Platform {
 		this.platforms.forEachAlive(function(platform){
 			positions.push({
 				x : platform.x
-				,y : platform.y
+				,y : platform.y + 10
 				,id : platform.id
 				,width : platform.width
 				,height : platform.height

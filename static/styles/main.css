@@ -11,16 +11,26 @@ html {
   height: 100%;
   margin: 0px;
   padding: 0px;
+  -webkit-text-size-adjust: none
+
 }
 
 body {
+  background-color: black;
+  touch-action: none;
+
   height: inherit;
   width: inherit;
   margin: 0px;
+  overflow: hidden;
+
+}
+
+#phased {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+
 }
 
 .fontloader {

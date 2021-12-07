@@ -5,7 +5,7 @@ class SoundControl {
 
 		// The numbers given in parameters are the indexes of the frames, in this order: over, out, down
 		let defaultFrame = this.game.sound.mute ? 1 : 0;
-		this.button = this.game.add.button(20, 20, 'sound-control', this.actionOnClick,this,defaultFrame,defaultFrame,defaultFrame);
+		this.button = this.game.add.button(20, 30, 'sound-control', this.actionOnClick,this,defaultFrame,defaultFrame,defaultFrame);
 	    return this;
 	}
 

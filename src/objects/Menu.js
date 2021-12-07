@@ -4,6 +4,7 @@ class Menu {
 		this.game = game;
 		this.options = options;
 		this.drawnTexts = [];
+		this.drawnButtons = [];
 
 		// Create an isActive property on each element
 		this.options.items.forEach(function(navItem,index){
@@ -38,9 +39,45 @@ class Menu {
     		this.drawnTexts.push(text);
 		}
 
+		const actionOnClick = function (label) {
+			return function() {
+				switch (label) 
+				{ 
+					case 'Start Game':
+						this.moveCursor(0);
+						break;
+					case 'High Scores':
+						this.moveCursor(1);
+						break;
+					case 'Credits':
+						this.moveCursor(2);
+						break;
+					case 'Algoanna':
+						this.moveCursor(0);
+						break;
+					case 'Flamingoanna':
+						this.moveCursor(1);
+						break;
+
+				}
+		let activeIndex = this.getActiveIndex();
+				//console.log(label, activeIndex)
+				this.drawMenu();
+	    		let activeMenu = this.getActiveMenu();
+	    		if (activeMenu) {
+					setTimeout(activeMenu.callback, 250);
+	    		}
+			}
+		}
+
+
 		this.options.items.forEach(function(navItem,index){
+			//console.log(navItem.label)
 			let topOffset = navigationOffset + index*40;
 			let text = this.game.add.text(this.game.width/2, topOffset,navItem.label);
+			var button = this.game.add.button(this.game.width/2-150, topOffset-9, '', (actionOnClick(navItem.label).bind(this)), this, 0, 0, 0);
+			//button.visible = false;
+			button.width = 300;
 		    text.anchor.set(0.5);
 		    text.align = 'center';
 		    text.font = 'arcade';
@@ -50,6 +87,7 @@ class Menu {
     		text.strokeThickness = navItem.isActive ? 6 : 0;
 
     		this.drawnTexts.push(text);
+    		this.drawnButtons.push(button);
 		},this);
 	}
 
@@ -105,6 +143,11 @@ class Menu {
 		this.game.input.keyboard.reset();
 		this.drawnTexts.forEach(function(navItem,index){
 			navItem.destroy();
+
+		});
+		this.drawnButtons.forEach(function(butItem,index){
+			butItem.destroy();
+
 		});
 	}
 

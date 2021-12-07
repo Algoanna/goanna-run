@@ -3,6 +3,7 @@ var gulp = require('gulp');
 var path = require('path');
 var argv = require('yargs').argv;
 var gutil = require('gulp-util');
+var ts = require('gulp-typescript');
 var source = require('vinyl-source-stream');
 var buffer = require('gulp-buffer');
 var uglify = require('gulp-uglify');
@@ -20,6 +21,8 @@ var LIB_PATHS = [
     './node_modules/lodash/lodash.min.js'
     ,'./node_modules/@orange-games/phaser-input/build/phaser-input.min.js'
     ,'./node_modules/jquery/dist/jquery.min.js'
+    ,'./node_modules/algosdk/dist/browser/algosdk.min.js'
+    ,'./node_modules/'
 ];
 
 var BUILD_PATH = './build';
@@ -126,7 +129,10 @@ function build() {
     .pipe(gulpif(!isProduction(), exorcist(sourcemapPath)))
     .pipe(source(OUTPUT_FILE))
     .pipe(buffer())
-    .pipe(gulpif(isProduction(), uglify()))
+    /*.pipe(gulpif(isProduction(), uglify().on('error', function(err) {
+        gutil.log(gutil.colors.red('[Error]'), err.toString());
+        this.emit('end');
+        })))*/
     .pipe(gulp.dest(SCRIPTS_PATH));
 
 }

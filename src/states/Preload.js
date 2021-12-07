@@ -5,6 +5,7 @@ class Preload extends Phaser.State {
 		// Load characters and game controls
 		this.game.load.image('brideLarge', 'assets/images/bride_large.png');
 		this.game.load.image('groomLarge', 'assets/images/groom_large.png');
+		this.game.load.image('goannaRun', 'assets/images/goanna_run.jpg');
 		this.game.load.image('heart', 'assets/images/heart.png');
 		this.game.load.spritesheet('sound-control', 'assets/images/sound-control.png', 48, 40);
 		

@@ -2,7 +2,16 @@ class Player {
 
 	constructor(game){
 		this.game = game;
+		this.swipeLeft = false;
+		this.swipeRight = false;
+		this.swipeUp = false;
+		this.swipeDown = false;
+		this.hitPlatform = false;
 
+		this.game.input.onUp.add(this.mouseUp, this);
+		this.game.input.onDown.add(this.mouseDown, this);
+
+	
 		// The default character is the groom
 		let characterSprite = 'groomSprite';
 
@@ -11,7 +20,7 @@ class Player {
 		}
 
 		// The player and its settings
-	    this.character = this.game.add.sprite(this.game.width/2, this.game.height - 150, characterSprite);
+	    this.character = this.game.add.sprite(this.game.width/2, this.game.height/3, characterSprite);
 
 	    //  We need to enable physics on the player
 	    this.game.physics.arcade.enable(this.character);
@@ -23,7 +32,7 @@ class Player {
 
 	    // Set a narrower bounding box for the character than the image itself
 		let characterImage = this.game.cache.getImage(characterSprite);
-	    this.character.body.setSize(100, characterImage.height-5, 4, 5);
+	    this.character.body.setSize(70, characterImage.height-10, 4, 5);
 
 	    //  Our two animations, walking left and right.
 	    this.character.animations.add('left', [0, 1, 2, 3, 4], 10, true);
@@ -36,6 +45,37 @@ class Player {
 	    };
 
 	    return this;
+	}
+
+	mouseDown() {
+        this.mouseIsDown = true;
+		this.startTime = new Date().getTime();
+		this.startX = this.game.input.activePointer.clientX;
+		this.startY = this.game.input.activePointer.clientY;
+    }
+
+    mouseUp() {
+        this.mouseIsDown = false;
+    }
+
+	swiper(left, right, down, up) {
+		this.swipeLeft = false;
+		this.swipeRight = false;
+		this.swipeDown = false;
+		this.swipeUp = false;
+
+		if (left) this.swipeLeft = true;
+		if (right) this.swipeRight = true;
+		if (down) this.swipeDown = true;
+		if (up) this.swipeUp = true;
+
+		setTimeout(function () { 
+			this.swipeLeft = false;
+			this.swipeRight = false;
+			this.swipeDown = false;
+			this.swipeUp = false;
+		}.bind(this), 700)
+
 	}
 
 	getObject() {
@@ -84,22 +124,57 @@ class Player {
 		 //  Stand still
         this.character.animations.stop();
         this.character.frame = 7;
+		
 	}
 
 	update(hitPlatform) {
  		var cursors = this.game.input.keyboard.createCursorKeys();
+
+
+		var distance = Phaser.Point.distance(this.game.input.activePointer.position, this.game.input.activePointer.positionDown);
+		var duration = this.game.input.activePointer.duration;
+
+		let xDiff = this.startX - this.game.input.activePointer.clientX;
+		let yDiff = this.startY - this.game.input.activePointer.clientY;
+
+		if (duration < 150 && (yDiff > 1)) {
+			this.swiper(false, false, false, true)
+		
+		} else
+		if (duration > 150) { // && duration < 250) {
+			//var positionDown = this.game.input.activePointer.positionDown;
+			//this.onSwipe.dispatch(this, positionDown);
+
+
+			if ( Math.abs(xDiff) > Math.abs(yDiff) ) {
+
+				if ( xDiff > 0 ) this.swiper(true)
+				else 			 this.swiper(false, true)
+			} else
+			{
+				if ( yDiff < 0 ) this.swiper(false, false, true)
+				//else 			 this.swiper(false, false, false, true)
+
+			} 
+
+		//console.log(xDiff, yDiff, Math.abs(xDiff) > Math.abs(yDiff) , this.swipeDown, this.swipeUp)
+		console.log(xDiff, yDiff, this.swipeDown, this.swipeUp, this.swipeLeft, this.swipeRight)
+
+		}
+
+
 
  		 //  Reset the players velocity (movement)
 	    this.character.body.velocity.x = this.game.Settings.physics.playerStandingSpeed;
 	    this.character.body.gravity.y = this.game.Settings.physics.playerGravity;
 
         //  Move to the left	
-	    if (cursors.left.isDown) {
+	    if (cursors.left.isDown || this.swipeLeft) {
 	        this.character.body.velocity.x = -this.game.Settings.physics.playerRunningBackwardSpeed;
 	        this.character.animations.play('left');
 	    }
         //  Move to the right
-	    else if (cursors.right.isDown) {
+	    else if (cursors.right.isDown || this.swipeRight) {
 	        this.character.body.velocity.x = this.game.Settings.physics.playerRunningForwardSpeed + this.game.Settings.physics.platformSpeed;
 	        this.character.animations.play('right');
 	    }
@@ -110,16 +185,19 @@ class Player {
 	    }
 
 	    // Add more gravity if the down button is pressed
-	    if (cursors.down.isDown) {
+	    if (cursors.down.isDown || this.swipeDown) {
 	        //  Move to the right
 	    	this.character.body.gravity.y = this.game.Settings.physics.playerGravity + this.game.Settings.physics.extraGravity;
 	    }
 
 	    //  Allow the player to jump if they are touching the ground.
-	    if (cursors.up.isDown && this.character.body.touching.down && hitPlatform) {
+	    if ((cursors.up.isDown || (this.swipeUp && this.mouseIsDown)) && this.character.body.touching.down && hitPlatform) {
 	        this.sounds.jump.play();
 	        this.character.body.velocity.y = -this.game.Settings.physics.playerJumpVelocity;
 	    }
+
+		this.hitPlatform = hitPlatform
+
 	}
 
 }

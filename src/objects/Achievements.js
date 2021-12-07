@@ -36,13 +36,13 @@ class Achievements {
 				}
 			}
 			,{
-				'text'  : '5 bunnies eliminated !'
+				'text'  : '5 algobees eliminated !'
 				,'check' : function() {
 					return this.bunniesKilled>4;
 				}
 			}
 			,{
-				'text'  : '10 bunnies eliminated !'
+				'text'  : '10 algobees eliminated !'
 				,'check' : function() {
 					return this.bunniesKilled>9;
 				}

@@ -13,12 +13,17 @@ import ToplistService from 'services/ToplistService';
 class Main extends Phaser.State {
 
 	create(characterType,params) {
+
 		// Enable Arcade Physics
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.physics.arcade.gravity.y = this.game.Settings.physics.worldGravity;
 
 		// Set world bounds: x, y, width, height
 		this.game.world.setBounds(0, 0, this.game.Settings.canvasWidth, this.game.Settings.canvasHeight)
+		//this.game.world.setBounds(0, 0, 800, 512) //this.game.Settings.canvasWidth, this.game.Settings.canvasHeight)
+		//console.log(this.game.Settings.canvasHeight)
+		//console.log(this.game.Settings.canvasWidth)
+
 
 		// Initialize score counter
 		this.coinsCollected = 0;
@@ -27,6 +32,7 @@ class Main extends Phaser.State {
 
 		// Game over flag
 		this.isGameOver = false;
+		this.isReplaying = false;
 
 		// Add Background
 		this.background = new Background(this.game);
@@ -66,6 +72,7 @@ class Main extends Phaser.State {
 		this.gameOverMusic = this.game.add.audio('game-over',this.game.Settings.musicVolume,false);
     	this.inGameMusic.play();
 
+
     	// Check for specific game events
     	this.timer = this.game.time.events.loop(this.game.Settings.timers.mainLoop, this.mainLoop, this);
 	}
@@ -73,9 +80,17 @@ class Main extends Phaser.State {
 	registerKeyhandler() {
 	    this.game.input.keyboard.onUpCallback = _.bind(function(e){
 			if(e.keyCode == Phaser.Keyboard.ESC) {
+				this.isReplaying = false;
+			    localStorage.setItem("lives", 3)
 	  			this.game.state.start('MainMenu');
 			}
 			if(e.keyCode == Phaser.Keyboard.ENTER && this.isGameOver) {
+
+				var lives = localStorage.getItem("lives")
+				if (parseInt(lives) < 1) 
+					return this.state.start('HighScores');
+				
+				this.isReplaying = true;
 	  			this.game.state.start('Main');
 			}
 		},this);
@@ -95,6 +110,8 @@ class Main extends Phaser.State {
 		// Kill player
 		this.player.die();
 
+		this.score.update(undefined, -1);
+
 		// Start playing the game over soundtrack
     	this.inGameMusic.destroy();
     	this.gameOverMusic.play();
@@ -103,10 +120,35 @@ class Main extends Phaser.State {
 		this.showGameOver();
 
 		// Save settings in the background
-		ToplistService.saveScore(this.game.Settings.playerName,this.calculateScore());
+		ToplistService.saveScore(this.game.Settings.playerName,this.calculateScore(),
+								 this.game.Settings.playerWallet,this.game);
 	}
 
 	showGameOver() {
+		const actionOnClick = function (label) {
+			return function() {
+
+					if (label == 'replay')
+					{
+						if (parseInt(this.score.lives._text) < 1)
+							this.state.start('HighScores');
+						else {
+							this.isReplaying = true;
+							this.game.state.start('Main');
+						}
+					} else
+					if (label == 'leave')
+					{
+						this.isReplaying = false;
+						this.game.state.start('MainMenu');
+					}
+					console.log('chosen', label)
+			}
+		}.bind(this)
+		
+		console.log(this.score.lives)
+		this.isReplaying = (parseInt(this.score.lives._text) > 0)
+
 		var gameOverText = this.game.add.text(this.game.width/2, 100,'GAME OVER');
 	    gameOverText.anchor.set(0.5);
 	    gameOverText.align = 'center';
@@ -116,20 +158,33 @@ class Main extends Phaser.State {
 	    gameOverText.stroke = '#FFFFFF';
     	gameOverText.strokeThickness = 6;
 
-    	var restartText = this.game.add.text(this.game.width/2, 200,'ENTER - Restart the game\n ESC - Go to main menu');
-	    restartText.anchor.set(0.5);
-	    restartText.align = 'center';
-	    restartText.font = 'arcade';
-	    restartText.fontSize = 30;
-	    restartText.fill = '#0b77a5';
-	    restartText.stroke = '#FFFFFF';
-    	restartText.strokeThickness = 2;
+		console.log('you failed')
+
+		console.log('replay', this.isReplaying)
+
+		var restartText = this.game.add.text(this.game.width/2, 220,'ENTER - Restart the game\n\n ESC - Go to main menu');
+		restartText.anchor.set(0.5);
+		restartText.align = 'center';
+		restartText.font = 'arcade';
+		restartText.fontSize = 30;
+		restartText.fill = '#FED345';
+		restartText.stroke = '#403511';
+		restartText.strokeThickness = 2;
+
+		var buttonReplay = this.game.add.button(this.game.width/2-160, 170, '', actionOnClick('replay'), this, 2, 1, 0);
+		var buttonLeave = this.game.add.button(this.game.width/2-140, 245, '', actionOnClick('leave'), this, 2, 1, 0);
+		buttonLeave.width = 300
+		buttonReplay.width = 320
+
 	}
 
 	update() {   	
 	   	// Update objects only if the game is running
-	   	if (!this.isGameOver) {	
 
+        this.game.debug.bodyInfo(this.player)
+        this.game.debug.body(this.player)
+
+	   	if (!this.isGameOver) {	
 		    //  Collision detections
 		    var hitPlatform = this.game.physics.arcade.collide(this.player.getObject(),this.platform.getObject());
 		    var hitGround = this.game.physics.arcade.collide(this.player.getObject(),this.ground.getObject());
@@ -139,12 +194,12 @@ class Main extends Phaser.State {
 		    this.platform.update(hitPlatform,hitGround);
 		    this.ground.update();
 		    this.coins.update();
-		    this.background.update();
+		    //this.background.update();
 		    this.enemies.update();
 		 
 		    // Update score
 		    this.score.update(this.calculateScore());
-
+			
 		    // Handle coin collection
 		    this.game.physics.arcade.collide(this.player.getObject(), this.coins.getObject(), this.collectCoin, _.noop, this);
 
